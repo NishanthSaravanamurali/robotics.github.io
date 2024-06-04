@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="First html page">
+    <meta name="keywords" content="HTML5, tags">
+    <meta name="author" content="abc">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="theorystyle.css">
+    <style>
+        /* CSS styling for increasing font size of bullet points */
+        .about-content ul {
+            font-size: 23px; /* Adjust the font size as needed */
+            margin-bottom: 15px;
+        }
+
+        /* Styles for MCQ section */
+        .mcq-section {
+            margin-top: 40px;
+        }
+
+        .mcq-question {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+
+        .mcq-options label {
+            display: block;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .mcq-submit {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: crimson;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Styles for modal popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .feedback-correct {
+            color: green;
+            font-weight: bold;
+        }
+
+        .feedback-incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+    <title>Quiz!</title>
+</head>
+
+<body>
+    <!-- Back arrow icon to navigate to MainPage.html -->
+    <a href="MainPage.html#contents">
+        <img src="Back.png" alt="Back" style="width: 30px; height: 30px; position: absolute; top: 20px; left: 20px;">
+    </a>
+    
+    <div class="max-width">
+        <div class="home-content">
+            <div class="text-1">Introduction to AI Robotics</div>
+            <div class="text-2">5 DOF and Hybrid Planar Robot</div>
+            <div class="text-3">Quiz Time!<span class="typing"></span></div>
+        </div>
+    </div>
+
+    <div class="max-width mcq-section">
+        <h2 class="title">MCQ Questions</h2><br>
+        <form id="mcq-form">
+            <div class="mcq-question">
+                <p>1. What is the main advantage of adding an additional degree of freedom to a robotic system?</p>
+                <div class="mcq-options" id="options1"></div>
+            </div><br>
+            <div class="mcq-question">
+                <p>2. What does forward kinematics in robotics involve?</p>
+                <div class="mcq-options" id="options2"></div>
+            </div><br>
+            <div class="mcq-question">
+                <p>3. What is a key challenge of inverse kinematics?</p>
+                <div class="mcq-options" id="options3"></div>
+            </div><br>
+            <div class="mcq-question">
+                <p>4. What is the role of Denavit-Hartenberg parameters in robotics?</p>
+                <div class="mcq-options" id="options4"></div>
+            </div><br>
+            <div class="mcq-question">
+                <p>5. What is a twist in robotics?</p>
+                <div class="mcq-options" id="options5"></div>
+            </div><br>
+            <button type="button" class="mcq-submit" onclick="checkAnswers()">Submit</button>
+        </form>
+    </div>
+
+    <!-- Modal for displaying feedback -->
+    <div id="mcq-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="mcq-feedback" class="mcq-feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        var questions = {
+            question1: {
+                text: "What is the main advantage of adding an additional degree of freedom to a robotic system?",
+                options: [
+                    { text: "Increase in weight", value: "a" },
+                    { text: "Increase in cost", value: "b" },
+                    { text: "Increase in adaptability and flexibility", value: "c" },
+                    { text: "Decrease in efficiency", value: "d" }
+                ],
+                correctAnswer: "Increase in adaptability and flexibility"
+            },
+            question2: {
+                text: "What does forward kinematics in robotics involve?",
+                options: [
+                    { text: "Calculating joint parameters from end-effector position", value: "a" },
+                    { text: "Calculating end-effector position from joint parameters", value: "b" },
+                    { text: "Optimizing robot's trajectory", value: "c" },
+                    { text: "Minimizing robot's energy consumption", value: "d" }
+                ],
+                correctAnswer: "Calculating end-effector position from joint parameters"
+            },
+            question3: {
+                text: "What is a key challenge of inverse kinematics?",
+                options: [
+                    { text: "Ensuring high speed", value: "a" },
+                    { text: "Calculating end-effector position", value: "b" },
+                    { text: "Dealing with singularities", value: "c" },
+                    { text: "Increasing robot's weight", value: "d" }
+                ],
+                correctAnswer: "Dealing with singularities"
+            },
+            question4: {
+                text: "What is the role of Denavit-Hartenberg parameters in robotics?",
+                options: [
+                    { text: "To minimize energy consumption", value: "a" },
+                    { text: "To represent the robot's speed", value: "b" },
+                    { text: "To systematically compute the position of each link", value: "c" },
+                    { text: "To increase robot's weight", value: "d" }
+                ],
+                correctAnswer: "To systematically compute the position of each link"
+            },
+            question5: {
+                text: "What is a twist in robotics?",
+                options: [
+                    { text: "A type of joint", value: "a" },
+                    { text: "A combination of linear and angular velocity", value: "b" },
+                    { text: "A type of sensor", value: "c" },
+                    { text: "A type of end-effector", value: "d" }
+                ],
+                correctAnswer: "A combination of linear and angular velocity"
+            }
+        };
+
+        var correctAnswers = {
+            question1: 'c',
+            question2: 'b',
+            question3: 'c',
+            question4: 'c',
+            question5: 'b'
+        };
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function renderQuestions() {
+            for (var question in questions) {
+                var options = questions[question].options;
+                shuffle(options);
+                var optionsHtml = '';
+                options.forEach(function(option) {
+                    optionsHtml += '<label><input type="radio" name="' + question + '" value="' + option.value + '"> ' + option.text + '</label>';
+                });
+                document.getElementById('options' + question.slice(-1)).innerHTML = optionsHtml;
+            }
+        }
+
+        function checkAnswers() {
+            var form = document.getElementById('mcq-form');
+            var feedback = document.getElementById('mcq-feedback');
+            var score = 0;
+            var totalQuestions = 5;
+            var feedbackHtml = '';
+
+            for (var question in questions) {
+                var selectedOption = form.elements[question].value;
+                var correctOption = questions[question].options.find(option => option.value === correctAnswers[question]).text;
+
+                if (selectedOption === correctAnswers[question]) {
+                    score++;
+                    feedbackHtml += '<p class="feedback-correct">Question ' + question.slice(-1) + ' is correct.</p>';
+                } else {
+                    feedbackHtml += '<p class="feedback-incorrect">Question ' + question.slice(-1) + ' is incorrect. The correct answer is: ' + correctOption + '.</p>';
+                }
+            }
+
+            feedbackHtml += '<p>Your score is ' + score + ' out of ' + totalQuestions + '.</p>';
+            feedback.innerHTML = feedbackHtml;
+
+            openModal();
+        }
+
+        function openModal() {
+            var modal = document.getElementById('mcq-modal');
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            var modal = document.getElementById('mcq-modal');
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById('mcq-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Shuffle and render questions on page load
+        window.onload = function() {
+            renderQuestions();
+        };
+    </script>
+    <div class="bottom-bar">
+        <div class="details">
+            <p>&copy; 2024 AI Robotics | AIE | Batch-B | Group-7 </p>
+        </div>
+    </div>
+</body>
+</html>

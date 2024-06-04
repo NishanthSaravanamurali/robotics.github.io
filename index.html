@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="First html page">
+    <meta name="keywords" content="HTML5, tags">
+    <meta name="author" content="abc">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <title>5 DOF and Hybrid Planar Robot</title>
+    <style>
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .about-content .column.left,
+        .about-content .column.right {
+            flex: 1;
+        }
+        .about-content .column.right img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="max-width">
+            <div class="logoimg">
+                <img src="logo.jpg" height="50%" alt="">
+            </div>
+            <div class="logo"><a href="#">Robotics<span> Final Project</span></a></div>
+            <ul class="menu">
+                <li><a href="#home" class="menu-btn">Home</a></li>
+                <li><a href="#about" class="menu-btn">About</a></li>
+                <li><a href="#contents" class="menu-btn">Contents</a></li>
+                <li><a href="#contact" class="menu-btn">The Team</a></li>
+            </ul>
+        </div>
+    </nav>
+    <section class="home" id="home">
+        <div class="max-width">
+            <div class="home-content">
+                <div class="text-1">Introduction to AI Robotics</div>
+                <div class="text-2">
+                    Batch B     Group :07
+                </div>
+                <div class="text-3">5 DOF and Hybrid Planar Robot<span class="typing"></span></div>
+                
+                <a href="#about">Scroll Down</a>
+            </div>
+            <img src="robot2.gif" alt="GIF" style="width: 50%; max-width: 400px; margin: 20px auto;">
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="max-width">
+            <h2 class="title">The General Idea...</h2>
+            <div class="about-content">
+                <div class="column left">
+                    <h3>Proposed Method:</h3>&emsp;&emsp;
+                        We are going to use a 4 DOF delta type parallel robot which helps in product assembly lines. The robot has four degrees of freedom, which means it can move in four independent directions or axes. These degrees of freedom are typically classified into three translational (Prismatic) and one rotational (Rotatory) motions.
+                        The delta robot consists of a fixed base with three parallel arms connected to a moving platform (end-effector). The arms are typically arranged in a triangular or delta configuration, hence the name.
+                        The delta robot's design employs a parallel structure, meaning that the end-effector is connected to the base through multiple parallel kinematic chains. This configuration provides advantages such as high rigidity, accuracy, and speed.
+                        <br><br>
+                    <h3>Novel Implementation:</h3>&emsp;&emsp;
+                        It is lacking a DOF and thus in this project we are increasing the DOF by 1 by adding a revolute joint to the end effector and thereby increasing its functionalities. 
+                    </p>
+                </div>
+                <div class="column right">
+    <img src="MainImg2.jpg" alt="Robot Image" style="padding: 60px;">
+</div>
+
+            </div>
+        </div>
+    </section> 
+
+    <section class="contents" id="contents">
+    <div class="max-width">
+        <h2 class="title">Contents</h2>
+        <div class="two-column-container">
+            <div class="two-column-left">
+                <div class="box">
+                    <a href="AimPage.html">AIM</a>
+                </div>
+                <div class="box">
+                    <a href="ProcedurePage.html">PROCEDURE</a>
+                </div>
+                <div class="box">
+                    <a href="Questions.html">QUIZ</a>
+                </div>
+            </div>
+            <div class="two-column-right">
+                <div class="box">
+                    <a href="TheoryPage.html">THEORY</a>
+                </div>
+                <div class="box">
+                    <a href="SimulationPage.html">SIMULATIONS</a>
+                </div>
+                <div class="box">
+                    <a href="ReferencePage.html">REFERENCES</a>
+                </div>
+            </div>
+        </div>
+        <div class="one-mid">
+            
+        </div>
+    </div>
+</section>
+
+
+
+<section class="contact" id="contact">
+    <div class="contactpg-title">
+        The Team!
+    </div>
+    <div class="contactpg-content">
+        <div class="top-left">Nishanth.S <br>CB.EN.U4AIE22149</div> <br><br>
+        <div class="top-right">Sarvesh.K <br>CB.EN.U4AIE22153</div>  <br><br>
+        <div class="bottom-left">Shruthi.R <br>CB.EN.U4AIE22154</div>  <br><br>
+        <div class="bottom-right">Praatosh.B <br>CB.EN.U4AIE22160</div>
+    </div>
+</section>
+
+<div class="bottom-bar">
+    <div class="details">
+        <p>&copy; 2024 AI Robotics | AIE | Batch-B | Group-7 </p>
+    </div>
+</div>
+
+</body>
+</html>

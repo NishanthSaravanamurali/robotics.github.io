@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Simulation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
+
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        #header {
+            text-align: center;
+            padding: 10px;
+            background-color: #fff;
+            color: #341400;
+        }
+
+        #content {
+            display: flex;
+            flex: 1;
+        }
+
+        #main-content {
+            flex: 7;
+            width: 100%;
+            height: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+            padding: 20px;
+        }
+
+        #robot-container {
+            width: 100%;
+            height: 90%;
+            background-color: #dee2e6;
+            border-radius: 8px;
+        }
+
+        #controls {
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #controls button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #E63946;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #controls button:hover {
+            background-color: #f06671;
+        }
+
+        .second-row-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #sidebar {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            background-color: #f1f3f5;
+            padding: 20px;
+            gap: 20px;
+            overflow-y: auto;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #sidebar .row {
+            border-top: 1px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        #sidebar button{
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #E63946;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        #sidebar  button:hover {
+            background-color: #f06671;
+        }
+
+        #sidebar .row:first-child {
+            border-top: none;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .slider-label {
+            font-weight: bold;
+        }
+
+        .slider-input {
+            width: 100%;
+        }
+
+        .matrix-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .matrix-container label {
+            text-align: center;
+        }
+
+        .matrix-container input {
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .twist-system-container, .ik-system-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .twist-system-title, .ik-system-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .twist-container, .ik-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .twist-image, .ik-image {
+            flex: 1;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .twist-values, .ik-values {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .twist-values table, .ik-values table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .twist-values td, .ik-values td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .bottom-bar {
+            width: 100%;
+            background-color: #341400; /* Dark brown color */
+            color: #ffffff;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bottom-bar .details {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <a href="MainPage.html#contents">
+            <img src="Back.png" alt="Back" style="width: 30px; height: 30px; position: absolute; top: 20px; left: 20px;">
+        </a>
+        <h1>Robot Simulation</h1>
+    </div>
+    <div id="content">
+        <div id="main-content">
+            <div id="robot-container"></div>
+            <div id="controls">
+                <button onclick="rotateRobot('x', -Math.PI / 18)">Rotate Left (X axis)</button>
+                <button onclick="rotateRobot('x', Math.PI / 18)">Rotate Right (X axis)</button>
+                <button onclick="rotateRobot('y', -Math.PI / 18)">Rotate Up (Y axis)</button>
+                <button onclick="rotateRobot('y', Math.PI / 18)">Rotate Down (Y axis)</button>
+                <button onclick="rotateRobot('z', -Math.PI / 18)">Rotate Clockwise (Z axis)</button>
+                <button onclick="rotateRobot('z', Math.PI / 18)">Rotate Counter-clockwise (Z axis)</button>
+                <div class="second-row-buttons">
+                    <button onclick="startRotation()">Start Rotation</button>
+                    <button onclick="stopRotation()">Stop Rotation</button>
+                </div>
+            </div>
+        </div>
+        <div id="sidebar">
+            <div class="row">
+		<h2>Sliders</h2>
+                <div class="slider-container">
+                    <label class="slider-label" for="slider-id">Link 8 Position:</label>
+                    <input type="range" min="0" max="75" value="50" class="slider-input" id="slider-id">
+		</div>
+		<div class="slider-container">
+                    <label class="slider-label" for="gripper-slider-id">Gripper Angle:</label>
+                    <input type="range" min="-180" max="180" value="0" class="slider-input" id="gripper-slider-id">
+                </div>
+		<button id="simulation-button" style="margin-left: 20px;" onclick="startSimulation()">Start Simulation</button>
+            </div>
+            <div class="row">
+		<h2>Transformation Matrix</h2>
+                <div class="matrix-container">
+                    <label></label><label>X</label><label>Y</label><label>Z</label><label>W</label>
+                    <label>Row 1</label><input type="number" id="m00" value="1"><input type="number" id="m01" value="0"><input type="number" id="m02" value="0"><input type="number" id="m03" value="0">
+                    <label>Row 2</label><input type="number" id="m10" value="0"><input type="number" id="m11" value="1"><input type="number" id="m12" value="0"><input type="number" id="m13" value="0">
+                    <label>Row 3</label><input type="number" id="m20" value="0"><input type="number" id="m21" value="0"><input type="number" id="m22" value="1"><input type="number" id="m23" value="0.75">
+                    <label>Row 4</label><input type="number" id="m30" value="0"><input type="number" id="m31" value="0"><input type="number" id="m32" value="0"><input type="number" id="m33" value="1">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="twist-system-section">
+       <div class="twist-system-container">
+           <div class="twist-system-title">Twist System</div>
+           <div class="twist-container">
+               <div class="twist-image">
+                   <img src="PS1.jpg" alt="Twist Image" style="width: 100%;">
+               </div>
+               <div class="twist-values">
+                   <pre>platform twist system for the chain PS1 relative to the Bxyz frame</pre>
+		    case 1 : when there is relative motion in the slider represented as ξ1
+	           <pre>
+ξ₁ = [0 0 0 0 0 1]ᵀ,
+ξ₂ = [1 0 0 0 0 0]ᵀ,
+ξ₃ = [0 1 0 0 0 0]ᵀ,
+ξ₄ = [0 0 1 0 0 0]ᵀ,
+ξ₅ = [1 0 0 0 Lsᶻ -Lsʸ]ᵀ,
+ξ₆ = [0 1 0 -Lsᶻ 0 Lsˣ]ᵀ,
+ξ₇ = [0 0 1 Lsʸ -Lsˣ 0]ᵀ,
+                    </pre>
+	       <table>
+                   <tr>
+                       <td>[ξ<sub>1</sub> ... ξ<sub>7</sub>] →</td>
+                       <td>
+                           <table>
+				<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                                <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                                <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                                <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>-Ls<sup>z</sup></td><td>Ls<sup>y</sup></td></tr>
+                                <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>Ls<sup>z</sup></td><td>0</td><td>-Ls<sup>x</sup></td></tr>
+                                <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>-Ls<sup>y</sup></td><td>Ls<sup>x</sup></td><td>0</td></tr>
+                           </table>
+                       </td>
+                   </tr>
+               	</table>
+		</div>
+		<div class="twist-values">
+			 <br><br>
+		    case 2 : when there is no relative motion in the slider represented as ξ1
+		     <pre>
+ξ₁ = [0 0 0 0 0 0]ᵀ,
+ξ₂ = [1 0 0 0 0 0]ᵀ,
+ξ₃ = [0 1 0 0 0 0]ᵀ,
+ξ₄ = [0 0 1 0 0 0]ᵀ,
+ξ₅ = [1 0 0 0 Lsᶻ -Lsʸ]ᵀ,
+ξ₆ = [0 1 0 -Lsᶻ 0 Lsˣ]ᵀ,
+ξ₇ = [0 0 1 Lsʸ -Lsˣ 0]ᵀ,
+                     </pre>
+	        <table>
+                    <tr>
+                        <td>[ξ<sub>2</sub> ... ξ<sub>7</sub>] →</td>
+                        <td>
+                            <table>
+				<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+                                <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                                <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+                                <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>-Ls<sup>z</sup></td><td>Ls<sup>y</sup></td></tr>
+                                <tr><td>0</td><td>0</td><td>0</td><td>Ls<sup>z</sup></td><td>0</td><td>-Ls<sup>x</sup></td></tr>
+                               <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </div>
+		
+	    <div class="twist-container">
+                <div class="twist-image">
+                    <img src="PS2.jpg" alt="Twist Image" style="width: 100%;">
+                </div>
+                <div class="twist-values">
+	
+                    <pre>platform twist system for the chain PS2 relative to the gripper frame</pre>
+		     <pre>
+ξ1 = [0 0 0 0 0 1]ᵀ,
+ξ2 = [1 0 0 0 0 0]ᵀ,
+ξ3 = [0 sy2 sz2 0 0 0]ᵀ,
+ξ4 = [0 sx1sy2 - sy1sx2 sy1sz2 0 -asy1sz2 asx1sz2 0]ᵀ,
+ξ5 = [0 sx1sz2 - sz1sx2 sz1sy2 0 -asz1sy2 asx1sy2 0]ᵀ
+                     </pre>
+		   
+		     <pre>where,<br> si=[sxi,syi,szi]ᵀ,i=1,2<br> a is a distance between points B1 and B2.<br> x=[1,0,0]ᵀ is a unit vector along the axis Bx1.
+		     </pre>
+                </div>
+		<div class="twist-values">
+		    <pre> there are three constrain in this system in the form of wrneches<br> and are represented as ζc ζ1 ζ2 </pre>
+		    <pre> ζ1=[s1ᵀ 0ᵀ]ᵀ, ζ2=[s2ᵀ a(x @ s2)ᵀ]ᵀ <br> ζc = [sx1sz2-sz1sx2 sy1sz2-sz1sy2 0 0 asz1sz2 -asz1sy2]ᵀ </pre>
+		    <pre> but as s1 and s2 are parallel which gives s1xs2=0 ,<br> ζc can be rewritten as,<br> ζc = [0 0 0 0 asz1sz2 -asz1sy2]ᵀ </pre>
+		    <pre> ζc prevents any rotational movement about any axis orthogonal<br> to platform movement as its axis is orthogonal to vector s2<br><br> [0 asz1sz2 -asz1sy2]@s2 = asz1sz2sy2-asz1sy2sz2 = 0 </pre>
+
+
+                </div>
+            </div>
+	    <div class="twist-container">
+                <div class="twist-image">
+                    <img src="PS3.jpg" alt="Twist Image" style="width: 100%;">
+                </div>
+                <div class="twist-values">
+                    <pre>The twist sytem for the end revolute joint is straight forward as it rotates only in one axis</pre>
+		    <pre>ξ1 = [0 0 0 0 0 1]ᵀ,<br>  where ξ1 is the twist system represented along the yellow line in the image <br>
+the value 1 represent that there is angular velocity possible along z-axis</pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="ik-system-section">
+       <div class="ik-system-container">
+           <div class="ik-system-title">Inverse Kinematics </div>
+           <div class="ik-container">
+               
+
+               <div class="ik-values">
+                   <pre>The inverse kinematics consists of determining the slider<br>displacements given the coordinates of the output link. </pre>
+		    <pre>Let x, y, and z define the position of the mobile platform's gripper<br>(point E), angle ɸ describes its orientation and the mobile platform's <br>(represented by point D) orientation in stationary reference frame Oxyz <br>and angle α defines by which angle the gripper holds the object. <br><br>These five parameters are the coordinates of the mobile platform. <br>Thus, the inverse kinematics aims to find position h of the slider (point A) <br>given a set of these coordinates.<br><br>Assume xc", yc", and zc" are the coordinates of point C in an auxiliary <br>reference frame Dx"y"z" and xc', yc', and zc' are the coordinates of point C <br>in an auxiliary reference frame Ex'y'z'. <br>Translation for Dx"y"z" to Ex'y'z is translation of height of gripper which <br>can be said h'.<br>We can find coordinates xc, yc, and zc of the same point in Oxyz as follows<br>
+[xc yc zc]ᵀ=[x y z]ᵀ+H[xc' yc' zc'] ......... (1)
+
+where H is the homogeneous transformation matrix
+angle α does not have any effect on displacement of slider as it only <br>dictates the angle gripper needs to make with object
+                   </pre>
+	       <table>
+                   <tr>
+                       <td>H→</td>
+                       <td>
+                           <table>
+				<tr><td>cos ɸ</td><td>0</td><td>sin ɸ</td><td>0</td>
+                                <tr><td>0</td><td>1</td><td>0</td><td>0</td>
+                                <tr><td>-sin ɸ</td><td>0</td><td>cos ɸ	</td><td>h'</td>
+                                <tr><td>0</td><td>0</td><td>0</td><td>1</td>
+                           </table>
+                       </td>
+                   </tr>
+               	</table>
+		<pre>we can write a relation that connects coordinates xb, yb, and zb of <br>point B with the ones of point C in Oxyz
+
+lbc²=(xc-xb)²+(yc-yb)²+(zc-zb)²
+
+where lbc is a rod length defined by the robot geometry.
+Assuming that zb=h and xb and yb are known by design, we can write a
+constraint equation for the chain as follows:<br>
+h=±√(lbc²-(xc-xb)²-(yc-yb)²)+zc ........... (2)
+
+Here, the “minus” sign indicates that the mobile platform is above the <br>slider, and the “plus” sign means the mobile platform is below it. 
+Thus using the above marked (1) and (2) equations, we can easily solve <br>the inverse kinematics for a PS1 chain.
+
+The solution for a PS2 chain will be similar,as it can be treated as <br>two separate PS1 chains with an additional condition: the output <br>link position is feasible only if the inverse kinematics solution <br>yields the same results for both separate PS1 chains. 
+
+		</pre>
+
+		</div>
+		<div class="ik-image">
+                   <img src="PS5-IK.jpg" alt="Twist Image" style="width: 100%;">
+                </div>
+		<div class="ik-image">
+                   <img src="PS4-IK.jpg" alt="Twist Image" style="width: 100%;">
+                </div>
+	       
+            </div>
+	    
+		
+	    	    
+        </div>
+    </div>
+
+    
+    <script>
+        // Utility function to clean up input strings
+        function cleanString(str) {
+            return str.trim().split(/\s+/).map(parseFloat);
+        }
+
+        // Create a scene
+        var scene = new THREE.Scene();
+
+        // Create a camera
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth * 0.7 / window.innerHeight * 0.7, 0.1, 1000);
+        camera.position.set(0, 0, 5);
+
+        // Create a renderer
+        var renderer = new THREE.WebGLRenderer();
+        var container = document.getElementById('robot-container');
+        var rect = container.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height);
+        container.appendChild(renderer.domElement);
+
+        // Define the robot model in JavaScript
+        var robot = new THREE.Group(); // Create a group to hold all robot parts
+
+        // Initialize linksURDF object
+        var linksURDF = {};
+
+        // Load and parse XML file
+        fetch('my_robot2.urdf')
+            .then(response => response.text())
+            .then(xml => {
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(xml, 'text/xml');
+                var links = xmlDoc.getElementsByTagName('link');
+                console.log("Total number of links:", links.length);
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
+                    console.log("Processing link", link);
+                    var name = link.getAttribute('name');
+                    var coll = link.querySelector('collision');
+                    if (coll) {
+                        var size;
+                        var geometryType = coll.querySelector('geometry').children[0].tagName;
+                        if (geometryType === 'box') {
+                            size = cleanString(coll.querySelector('box').getAttribute('size'));
+                        } else if (geometryType === 'cylinder') {
+                            var radius = parseFloat(coll.querySelector('cylinder').getAttribute('radius'));
+                            var length = parseFloat(coll.querySelector('cylinder').getAttribute('length'));
+                            size = [radius * 2, radius * 2, length]; // Assuming cylinders are aligned along Z-axis
+                        }
+
+                        var position = [0, 0, 0]; // Default position if not found
+                        var rotation = [0, 0, 0]; // Default rotation if not found
+                        var origin = coll.querySelector('origin');
+                        if (origin) {
+                            var xyzAttribute = origin.getAttribute('xyz');
+                            if (xyzAttribute) {
+                                position = cleanString(xyzAttribute);
+                            }
+                            var rpyAttribute = origin.getAttribute('rpy');
+                            if (rpyAttribute) {
+                                rotation = cleanString(rpyAttribute);
+                            }
+                        }
+                        console.log("Position:", position);
+                        console.log("Rotation (RPY):", rotation);
+                        linksURDF[name] = { "size": size, "position": position, "rotation": rotation };
+                    }
+                }
+
+                // Add links to the scene
+                var specificLinkName = "gripper"; // Replace with the actual link name
+                for (var linkName in linksURDF) {
+                    var linkData = linksURDF[linkName];
+                    var geometry = new THREE.BoxGeometry(linkData.size[0], linkData.size[1], linkData.size[2]);
+                    var material;
+                    if (linkName === specificLinkName) {
+                        material = new THREE.MeshBasicMaterial({ color: 0x0023F5 }); // Specific link in red
+                    } else {
+                        material = new THREE.MeshBasicMaterial({ color: 0xCCCCCC });
+                    }
+                    var linkMesh = new THREE.Mesh(geometry, material);
+                    linkMesh.position.set(linkData.position[0], linkData.position[1], linkData.position[2]);
+
+                    // Apply rotation if RPY values are not zero
+                    linkMesh.rotation.set(linkData.rotation[0], linkData.rotation[1], linkData.rotation[2]);
+
+                    robot.add(linkMesh);
+                }
+
+                // Add the robot to the scene
+                scene.add(robot);
+            })
+            .catch(error => console.error('Error fetching XML:', error));
+
+        // Define function to rotate the robot
+        function rotateRobot(axis, angle) {
+            switch(axis) {
+                case 'x':
+                    robot.rotation.x += angle;
+                    break;
+                case 'y':
+                    robot.rotation.y += angle;
+                    break;
+                case 'z':
+                    robot.rotation.z += angle;
+                    break;
+            }
+        }
+
+        // Rotation flag
+        var isRotating = false;
+
+        // Functions to start and stop rotation
+        function startRotation() {
+            isRotating = true;
+        }
+
+        function stopRotation() {
+            isRotating = false;
+        }
+
+        // Define animation function
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isRotating) {
+                robot.rotation.z += 0.01; // Continuous rotation around the Z axis
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Call the animation function to start rendering
+        animate();
+
+        var prev = 0;
+        // Function to update the position of link 8 based on slider value
+        function updateLinkPosition(value) {
+            if (robot.children.length >= 8) {
+                var base = robot.children[7]; // 8th link (index 7)
+                var link1 = robot.children[8];
+                var link2 = robot.children[9];
+                var link3 = robot.children[10];
+                var link4 = robot.children[11];
+                var grip = robot.children[6];
+
+		if (isSimulationOn && value >0.41){
+           	base.position.z = base.position.z + value - 0.5 - prev ;
+        	link1.position.z = link1.position.z + value - 0.5 - prev;
+            link2.position.z = link2.position.z + value - 0.5 - prev;
+        	link3.position.z = link3.position.z + value - 0.5 - prev;
+        	link4.position.z = link4.position.z + value - 0.5 - prev;
+            grip.position.z = grip.position.z+ value - 0.5 -prev;
+			cube.position.z = cube.position.z+value - 0.5 -prev;
+ 	    	console.log("Cube position updated to:", cube.position.z);
+			prev = value - 0.5;
+            updateMatrixValue(0.25 + value);
+		} else if (!isSimulationOn){
+			base.position.z = base.position.z + value - 0.5 - prev ;
+                	link1.position.z = link1.position.z + value - 0.5 - prev;
+                	link2.position.z = link2.position.z + value - 0.5 - prev;
+                	link3.position.z = link3.position.z + value - 0.5 - prev;
+                	link4.position.z = link4.position.z + value - 0.5 - prev;
+                	grip.position.z = grip.position.z+ value - 0.5 -prev;
+			prev = value - 0.5;
+            updateMatrixValue(0.25 + value);
+		}
+                
+                console.log("Link 8 position updated to:", prev);
+            }
+        }
+
+        // Function to update the m23 value based on slider input
+        function updateMatrixValue(value) {
+            var m23Input = document.getElementById("m23");
+            m23Input.value = value;
+
+            // Optionally, you can update the actual transformation matrix or any dependent logic here
+            // e.g., updateTransformationMatrix();
+        }
+
+        // Example slider functionality
+        var slider = document.getElementById("slider-id");
+        slider.oninput = function() {
+            var value = (this.value / 100); // Scale value to 0 to 1
+            updateLinkPosition(value);
+            
+        }
+
+        // Function to update the rotation of the gripper based on slider value
+        function updateGripperRotation(value) {
+            var radians = value * (Math.PI / 180); // Convert degrees to radians
+            if (robot.children.length > 6 && isSimulationOn) {
+                var gripper = robot.children[6]; // Assuming the gripper is the 7th child
+                gripper.rotation.z = radians; // Rotate around the Z-axis
+                console.log("Gripper rotation updated to:", radians, "radians");
+		cube.rotation.z = radians; // Rotate around the Z-axis
+ 	        console.log("Cube rotation updated to:", radians, "radians");
+            } else {
+		var gripper = robot.children[6]; // Assuming the gripper is the 7th child
+                gripper.rotation.z = radians; // Rotate around the Z-axis
+                console.log("Gripper rotation updated to:", radians, "radians");
+	    }
+
+            // Update the transformation matrix for the gripper rotation
+            updateGripperMatrixValue(radians);
+        }
+
+        // Function to update the transformation matrix values for the gripper rotation
+        function updateGripperMatrixValue(radians) {
+            var m00Input = document.getElementById("m00");
+            var m01Input = document.getElementById("m01");
+            var m10Input = document.getElementById("m10");
+            var m11Input = document.getElementById("m11");
+
+            var cosTheta = Math.cos(radians);
+            var sinTheta = Math.sin(radians);
+
+            m00Input.value = cosTheta;
+            m01Input.value = -sinTheta;
+            m10Input.value = sinTheta;
+            m11Input.value = cosTheta;
+        }
+	
+	function createCube() {
+	    var geometry = new THREE.BoxGeometry(0.2, 0.2, 0.69); // Default dimensions
+ 	    var material = new THREE.MeshBasicMaterial({ color: 0x0C9900 }); // Green color
+ 	    var cube = new THREE.Mesh(geometry, material);
+ 	    cube.position.set(0, 0, -0.36); // Initial position
+ 	    robot.add(cube);
+	    console.log(cube);
+ 	    return cube;
+ 	}
+
+	var isSimulationOn = false; // Variable to track simulation state
+	var cube;
+	
+ 	// Function to handle simulation button click
+ 	function toggleSimulation() {
+	    var sliderInput = document.getElementById("slider-id");
+ 	    if (!isSimulationOn) {
+ 	        // Turn on simulation
+ 	        isSimulationOn = true;
+ 	        simulationButton.textContent = "Stop Simulation";
+
+         	// Create and add the cube to the scene
+ 	        cube = createCube();
+		sliderInput.value = 50;
+		prev =0;
+		var base = robot.children[7]; // 8th link (index 7)
+                var link1 = robot.children[8];
+                var link2 = robot.children[9];
+                var link3 = robot.children[10];
+                var link4 = robot.children[11];
+                var grip = robot.children[6];
+ 
+		base.position.z = 0.02;
+                link1.position.z = 0.22;
+                link2.position.z = 0.22;
+                link3.position.z = 0.17;
+                link4.position.z = 0.17;
+                grip.position.z = 0;	
+		       
+ 	
+ 	    } else {
+ 	        // Turn off simulation
+ 	        isSimulationOn = false;
+ 	        simulationButton.textContent = "Start Simulation";
+ 	
+ 	        // Remove the cube from the scene
+ 	        
+ 	        if (cube) {
+ 	            robot.remove(cube);
+ 	        }
+		sliderInput.value = 50;
+		prev = 0;
+		var base = robot.children[7]; // 8th link (index 7)
+                var link1 = robot.children[8];
+                var link2 = robot.children[9];
+                var link3 = robot.children[10];
+                var link4 = robot.children[11];
+                var grip = robot.children[6];
+ 	
+		base.position.z = 0.02;
+                link1.position.z = 0.22;
+                link2.position.z = 0.22;
+                link3.position.z = 0.17;
+                link4.position.z = 0.17;
+                grip.position.z = 0;
+ 	    }
+ 	}
+
+	// Assign the toggleSimulation function to the button click event
+	var simulationButton = document.getElementById("simulation-button");
+	simulationButton.onclick = toggleSimulation;
+
+        // Gripper slider functionality
+        var gripperSlider = document.getElementById("gripper-slider-id");
+        gripperSlider.oninput = function() {
+            var value = parseInt(this.value); // Get the value as an integer
+            updateGripperRotation(value);
+        }
+    </script>
+
+    <div class="bottom-bar">
+        <div class="details">
+            <p>&copy; 2024 AI Robotics | AIE | Batch-B | Group-7 </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="First html page">
+	<meta name="keywords" content="HTML5, tags">
+	<meta name="author" content="abc">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
+	<title>NS MUSEUM</title>
+</head>
+
+<body>
+    <nav class="navbar">
+		<div class="max-width">
+			<div class="logoimg">
+				<img src="logo.jpg" height="50%" alt="">
+			</div>
+    		<div class="logo"><a href="#">ICN<span> Final Project</span></a></div>
+            <ul class="menu">
+                <li><a href="#home" class="menu-btn">Home</a></li>
+                <li><a href="#about" class="menu-btn">Module 1</a></li>
+                <li><a href="#Stratum" class="menu-btn">Module 2</a></li>
+                <li><a href="#contact" class="menu-btn">Case Study</a></li>
+            </ul>
+            
+		</div>
+	</nav>
+	<section class="home" id="home">
+        <div class="max-width">
+            <div class="home-content">
+                <div class="text-1">Introduction to Computer Networks</div>
+                <div class="text-2">
+                	Batch B     Group :09
+                </div>
+                <div class="text-3">Networking using RaspberryPi <span class="typing"></span></div>
+                <a href="#about">Scroll Down</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="max-width">
+            <h2 class="title">Module 1</h2>
+            <div class="about-content">
+                <div class="column left">
+                    <div class="text">Hosting a website using RaspberryPi
+<span class="typing-2"></span></div>
+                    <p>Introduction:<br>&emsp;&emsp;
+When a webite is hosted using RaspberryPi, all the systems which are connected in the same network as the device, can access this website using the IP address of RaspberryPi. The website we are demonstrating is a basic implementation of a HTML - CSS page using apache software.
+<br><br>
+Details:<br>&emsp;&emsp;
+The main goal for the Apache service is to answer requests on HTTP and HTTPS ports of your Raspberry Pi. HTTP and HTTPS are the main protocols on the Internet for web surfing. It works because Apache is here to respond to your browser requests on ports 80 and 443.
+When Apache receives a request on your Raspberry Pi IP address, it has to display something, depending on your Apache configuration. Typically, it’s an HTML page for your website or the app you’re using on the Raspberry Pi.
+.</p>
+                    
+                </div>
+                <div class="column right">
+                		<img class="hallwayimg" src="../image/hallway.jpg" height="100%" width="100%">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="about" id="about">
+        <div class="max-width">
+            <h2 class="title">Module 2</h2>
+            <div class="about-content">
+                <div class="column left">
+                    <div class="text">File Transfer using RaspberryPi
+<span class="typing-2"></span></div>
+                    <p>Introduction:<br>&emsp;&emsp;
+We utilize a Raspberry Pi as our server for storing encrypted files via Python. It enables multiple devices within the same network to connect to and access stored data.
+<br><br>
+Details:<br>&emsp;&emsp;
+Rather than utilizing the FTP protocol, we transmit files by breaking them into 128-byte chunks and maintaining an uninterrupted connection through the TCP protocol. The client is capable of accessing and downloading files from the server, but the download occurs only when the file matches the one originally uploaded by the client.
+The client uses a Merkle tree data structure to verify the integrity of the files, ensuring that any changes or alterations are easily detectable through the structure of the tree.
+</p>
+                    
+                </div>
+                <div class="column right">
+                		<img class="hallwayimg" src="../image/hallway.jpg" height="100%" width="100%">
+                </div>
+            </div>
+        </div>
+    </section>
+	<section class="contact" id="contact">
+			<div class="contactpg-title">
+				Case Study
+			</div>
+			<div class="contactpg-content">
+				<div class="dummy"></div>
+				<div class="subcontent">
+					<div class="dummy2"></div>
+					<div class="contactpg-text">
+						Ask me any question you might have or <br>just drop me a message to say hello :)
+					</div>
+					<div class="contactpg-img">
+						<a href="https://mail.google.com/" target="_blank"><img src="../image/gmail.svg" alt="" height="50" width="50"></a>
+						<a href="https://web.whatsapp.com/" target="_blank"><img src="../image/whatsapp.svg" alt="" height="50" width="50"></a>
+						<a href="https://www.instagram.com/" target="_blank"><img src="../image/instagram.svg" alt="" height="50" width="50"></a>
+					</div>
+				</div>
+				<div class="dummy"></div>
+			</div>
+			<div class="contactpg-bottom">
+				<div class="endmsg">
+					S.Nishanth,CB.EN.U4AIE22149<br>Shruthi.R,CB.EN.U4AIE22154<br>Datti Gowtham Naidu,CB.EN.U4AIE22116<br>Yashwanth Chowdary,CB.EN.U4AIE22131 
+<br>Batch-B  &nbsp;Group-9
+				</div>
+			</div>
+		</section>
+
+</body>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+var images = document.getElementsByClassName("myImg");
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+
+for (var i = 0; i < images.length; i++) {
+  images[i].onclick = function() {
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    captionText.innerHTML = this.alt;
+  };
+}
+
+var span = document.getElementsByClassName("close")[0];
+
+span.onclick = function() {
+  modal.style.display = "none";
+};
+
+</script>
+
+
+</html>

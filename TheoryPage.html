@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="First html page">
+    <meta name="keywords" content="HTML5, tags">
+    <meta name="author" content="abc">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="theorystyle.css">
+    <title>Theory</title>
+</head>
+<body>
+    <!-- Back arrow icon to navigate to MainPage.html -->
+    <a href="MainPage.html#contents">
+        <img src="Back.png" alt="Back">
+    </a>
+
+    <div class="max-width">
+        <div class="home-content">
+            <div class="text-1">Introduction to AI Robotics</div>
+            <div class="text-2">5 DOF and Hybrid Planar Robot</div>
+            <div class="text-2">Theory</div>
+            <div class="text-3">Forward Kinematics, Twist system, Inverse Kinematics</div>
+        </div>
+    </div>
+
+    <section class="center-content">
+        <div>
+            <h2>Forward Kinematics</h2>
+            <p>Forward kinematics involves calculating the position and orientation of the robot's end-effector given the joint parameters. It uses the known joint angles and link lengths to determine the end-effector's location in space.</p>
+            <ul>
+                <li>Input: Joint parameters (angles for revolute joints and displacements for prismatic joints)</li>
+                <li>Output: Position and orientation of the end-effector</li>
+            </ul>
+            <p>The process involves using the Twist system parameters (in our robot) and transformation matrices to systematically compute the position of each link relative to the base frame. The final transformation matrix represents the pose of the end-effector.</p>
+        </div>
+    </section>
+
+    <section class="center-content">
+        <div>
+            <h2>What is twist system?</h2>
+            <p>A twist is a 6-dimensional vector that represents the velocity of a rigid body in space. It combines both linear and angular velocity into a single entity.</p>
+            <div class="text-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;ξ=[ v   ω ]ᵀ </div>
+            <p>where:<br>
+            v is a 3-dimensional vector representing the linear velocity.<br>
+            ω is a 3-dimensional vector representing the angular velocity.</p>
+        </div>
+        <div>
+            <h2>Components of a Twist</h2>
+            <p>Linear Velocity (v): This describes how fast the robot's position is changing in space, given in meters per second (m/s).</p>
+            <p>Angular Velocity (ω): This describes how fast the robot is rotating, given in radians per second (rad/s).</p>
+        </div>
+        <div>
+            <h2>Twist Representation</h2>
+            <p>Twists are often represented in a homogeneous transformation matrix, especially when dealing with the kinematics of robot arms or mobile robots. This matrix can be used to transform the twist between different coordinate frames.</p>
+        </div>
+        <div>
+            <h2>General Form of a Twist Vector</h2>
+            <p>A twist vector ξ in 3D space is a 6-dimensional vector that combines linear and angular velocities:</p>
+            <div class="text-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;ξ=[v𝑥,v𝑦,v𝑧,ω𝑥,ω𝑦,ω𝑧]ᵀ</div>
+            <p>where:<br>
+            v𝑥, v𝑦, v𝑧 are the components of the linear velocity.<br>
+            ω𝑥, ω𝑦, ω𝑧 are the components of the angular velocity.</p>
+        </div>
+        <div>
+            <h2>Clarifying Linear vs. Angular Velocity</h2>
+            <ul>
+                <li>Linear Velocity: This is the rate at which an object moves along a straight path in space. It is measured in units of distance per time (e.g., meters per second) and has three components corresponding to movement along the x, y, and z axes.</li>
+                <li>Angular Velocity: This is the rate at which an object rotates around a point or axis. It is measured in units of angle per time (e.g., radians per second) and has three components corresponding to rotation about the x, y, and z axes.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="center-content">
+        <div>
+            <h2>Inverse Kinematics</h2>
+            <p>Inverse kinematics involves determining the joint parameters that achieve a desired position and orientation of the robot's end-effector. It is often more complex than forward kinematics due to the possibility of multiple solutions or no solution at all.</p>
+            <ul>
+                <li>Input: Desired position and orientation of the end-effector</li>
+                <li>Output: Joint parameters needed to achieve that position and orientation</li>
+            </ul>
+            <p>Inverse kinematics can be solved using analytical or numerical methods. Analytical methods provide a closed-form solution but are only feasible for simpler robots. Numerical methods, such as iterative algorithms, are more versatile but may require good initial guesses and can be computationally intensive.</p>
+            <p>Challenges in inverse kinematics include dealing with singularities, where the robot's movement becomes indeterminate, and ensuring that the solutions are within the robot's physical constraints.</p>
+        </div>
+    </section>
+
+    <!-- Bottom bar with centered details -->
+    <div class="bottom-bar">
+        <div class="details">
+            <p>&copy; 2024 AI Robotics | AIE | Batch-B | Group-7 </p>
+        </div>
+    </div>
+</body>
+</html>

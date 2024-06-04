@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="First html page">
+    <meta name="keywords" content="HTML5, tags">
+    <meta name="author" content="abc">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="theorystyle.css">
+    <title>Reference</title>
+    <style>
+        
+        ul.custom-bullets {
+            list-style: none; /* Remove default bullets */
+            padding: 0; /* Remove default padding */
+        }
+
+        ul.custom-bullets li {
+            margin-left: 350px; /* Adjust left margin for spacing */
+            margin-bottom: 50px;
+            padding-left: 30px; /* Add padding for spacing */
+            background: url('ref.png') no-repeat left center; /* Set custom bullet image */
+            background-size:25px 25px; /* Adjust size of the image if necessary */
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="MainPage.html#contact">
+        <img src="Back.png" alt="Back" style="width: 30px; height: 30px; position: absolute; top: 20px; left: 20px;">
+    </a>
+
+    <div class="max-width">
+        <div class="home-content">
+            <div class="text-1">Introduction to AI Robotics</div>
+            <div class="text-2">5 DOF and Hybrid Planar Robot</div>
+            <div class="text-3">References Used<span class="typing"></span></div>
+        </div>
+    </div>
+
+    <ul class="custom-bullets">
+        <li>https://link.springer.com/article/10.1007/s40430-023-04128-7#Sec7 <br> Kinematic and singularity analysis of a 4-DOF Delta-type parallel robot<br>
+Technical Paper<br>
+Published: 24 March 2023</li>
+        <li>http://vlabs.iitkgp.ac.in/mr/exp0/index.html# <br> Virtual Labs - PUMA 560 sample</li>
+        <li>https://in.mathworks.com/help/robotics/manipulator-modeling.html <br> Manipulator Modeling - MATLAB</li>
+        <li>Robotics,Vision and Control<br>Fundamental Algorithms in MATLAB Peter Corke <br> Twist system       </li>
+    </ul>
+    <div class="bottom-bar">
+        <div class="details">
+            <p>&copy; 2024 AI Robotics | AIE | Batch-B | Group-7 </p>
+        </div>
+    </div>
+</body>
+</html>
