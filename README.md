@@ -38,3 +38,5 @@ URDF Export: The complete robot model is exported to a URDF file for use in othe
 
 Conclusion
 This project provides a comprehensive approach to creating and simulating a robotic model in MATLAB. By defining rigid bodies, collision properties, and joints, and by exporting the model to URDF, it ensures that the robot can be accurately represented and used in various robotic simulation environments.
+
+Unlike the usual representation of the Twist systems as [v ω] which is a 6 dimensional twist vector we have implemented the twist system as [ω v] which is the angular velocity followed by the linear velocity. PS: This is a key part in the forward kinematics of the robot so do note it. 
